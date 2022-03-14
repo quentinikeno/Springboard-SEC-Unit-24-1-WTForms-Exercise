@@ -16,13 +16,13 @@ connect_db(app)
 
 
 @app.route("/")
-def homepage():
+def show_homepage():
     """Show homepage."""
     pets = Pet.query.all()
     return render_template("index.html", pets=pets)
 
 @app.route("/add", methods=["GET", "POST"])
-def new_pet_form():
+def show_new_pet_form():
     """Show form to add a pet.  Create the pet in db when POST request."""
     form = PetForm()
     
@@ -33,6 +33,7 @@ def new_pet_form():
         new_pet = Pet(**data)
         db.session.add(new_pet)
         db.session.commit()
+        
         flash("Successfully created a new pet!", "success")
         return redirect("/")
     else:
@@ -41,7 +42,7 @@ def new_pet_form():
         return render_template("add_pet_form.html", form=form)
     
 @app.route("/<int:pet_id_number>", methods=["GET", "POST"])
-def pet_detail(pet_id_number):
+def show_pet_detail(pet_id_number):
     """Show pet detail and form to edit pet.  Update pet in db when POST request."""
     pet = Pet.query.get_or_404(pet_id_number)
     form = EditPetForm(obj=pet)
@@ -50,9 +51,9 @@ def pet_detail(pet_id_number):
         pet.photo_url = form.photo_url.data
         pet.age = form.age.data
         pet.available = form.available.data
-        print(form.available.data)
         db.session.add(pet)
         db.session.commit()
+        
         flash(f"Successfully updated {pet.name}!", "success")
         return redirect("/")
     else:
