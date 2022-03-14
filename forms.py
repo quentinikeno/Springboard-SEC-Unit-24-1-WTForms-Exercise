@@ -17,7 +17,7 @@ class PetForm(FlaskForm):
     notes = StringField("Notes", validators=[Optional()])
     
 class EditPetForm(FlaskForm):
-    """Form for editing pets for adoption."""
+    """Form for editing pets on detail page."""
     
     photo_url = StringField("Photo URL", validators=[Optional(), URL()])
     age = IntegerField("Age", validators=[Optional(), NumberRange(min=0, max=30)])
