@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block title %} Pets for Adoption! {% endblock %} {%
+block content %}
+<h1 class="text-center display-1">Pets</h1>
+
+<section>
+	<div class="row justify-content-center my-3">
+		<div class="col-12 col-sm-6 col-md-4">
+			<a href="/add" class="btn btn-info text-white d-block"
+				><strong>Add Pet!</strong></a
+			>
+		</div>
+	</div>
+	<div class="row">
+		{% if pets %} {% for pet in pets %}
+		<div class="col-12 col-sm-6 col-md-4">
+			<img
+				src="{{pet.photo_url}}"
+				alt="{{pet.name}}'s photo"
+				class="img-fluid img-thumbnail"
+			/>
+			<p>
+				<strong class="text-info">{{pet.name}}</strong>{% if
+				pet.available %} is available! {% else %} now has a home! {%
+				endif %}
+			</p>
+		</div>
+		{% endfor %} {% else %}
+		<p>Sorry no pets...</p>
+		{% endif %}
+	</div>
+</section>
+
+{% endblock %}

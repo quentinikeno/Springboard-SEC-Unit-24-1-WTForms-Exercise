@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db
+from models import db, connect_db, Pet
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "oh-so-secret"
@@ -16,4 +16,5 @@ connect_db(app)
 @app.route("/")
 def homepage():
     """Show homepage."""
-    return render_template("index.html")
+    pets = Pet.query.all()
+    return render_template("index.html", pets=pets)
