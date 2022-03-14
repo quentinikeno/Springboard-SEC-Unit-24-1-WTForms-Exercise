@@ -23,7 +23,7 @@ def homepage():
 
 @app.route("/add", methods=["GET", "POST"])
 def new_pet_form():
-    
+    """Show form to add a pet.  Create the pet in db when POST request."""
     form = PetForm()
     
     if form.validate_on_submit():
@@ -42,7 +42,7 @@ def new_pet_form():
     
 @app.route("/<int:pet_id_number>", methods=["GET", "POST"])
 def pet_detail(pet_id_number):
-    
+    """Show pet detail and form to edit pet.  Update pet in db when POST request."""
     pet = Pet.query.get_or_404(pet_id_number)
     form = EditPetForm(obj=pet)
     
