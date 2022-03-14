@@ -24,7 +24,8 @@ class Pet(db.Model):
     age = db.Column(db.Integer)
     notes = db.Column(db.Text)
     available = db.Column(db.Boolean, 
-                          nullable=False)
+                          nullable=False,
+                          default=True)
     
     def __repr__(self):
         """Representation of Pet Model."""
