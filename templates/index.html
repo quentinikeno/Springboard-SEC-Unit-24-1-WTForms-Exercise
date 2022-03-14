@@ -19,9 +19,9 @@ block content %}
 				class="img-fluid img-thumbnail"
 			/>
 			<p>
-				<strong class="text-info">{{pet.name}}</strong>{% if
-				pet.available %} is available! {% else %} now has a home! {%
-				endif %}
+				<a href="/{{pet.id}}"><strong>{{pet.name}}</strong></a
+				>{% if pet.available %} is available! {% else %} now has a home!
+				{% endif %}
 			</p>
 		</div>
 		{% endfor %} {% else %}

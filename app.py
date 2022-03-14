@@ -44,12 +44,13 @@ def new_pet_form():
 def pet_detail(pet_id_number):
     
     pet = Pet.query.get_or_404(pet_id_number)
-    form = EditPetForm()
+    form = EditPetForm(obj=pet)
     
     if form.validate_on_submit():
         pet.photo_url = form.photo_url.data
         pet.age = form.age.data
         pet.available = form.available.data
+        print(form.available.data)
         db.session.add(pet)
         db.session.commit()
         flash(f"Successfully updated {pet.name}!", "success")

@@ -42,6 +42,7 @@ class PetViewsTestCase(TestCase):
         db.session.rollback()
     
     def test_route_route(self):
+        """Testing the route route listing all pets."""
         with app.test_client() as client:
             resp = client.get("/")
             html = resp.get_data(as_text=True)
@@ -51,6 +52,7 @@ class PetViewsTestCase(TestCase):
             self.assertIn(f"{self.pet.name}", html)
 
     def test_pet_add_form(self):
+        """Testing the form to add pets."""
         with app.test_client() as client:
             resp = client.get("/add")
             html = resp.get_data(as_text=True)
@@ -59,6 +61,7 @@ class PetViewsTestCase(TestCase):
             self.assertIn('<form id="pet-form" method="POST">', html)
 
     def test_pet_add(self):
+        """Testing the adding of new pet to db."""
         with app.test_client() as client:
             d = {"name": "Test Pet 2", "species": "dog"}
             resp = client.post("/add", data=d, follow_redirects=True)
@@ -67,3 +70,22 @@ class PetViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h1 class="text-center display-1">Pets</h1>', html)
             self.assertIn("Test Pet 2", html)
+            
+    def test_pet_detail(self):
+        """Test pet detail page with form to edit pet."""
+        with app.test_client() as client:
+            resp = client.get(f"/{self.pet.id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f"What You Should Know About {self.pet.name}", html)
+            
+    def test_pet_update(self):
+        """Testing of updating pet in db."""
+        with app.test_client() as client:
+            d = {"age": 2, "available": False}
+            resp = client.post(f"/{self.pet.id}", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'Successfully updated {self.pet.name}!', html)
