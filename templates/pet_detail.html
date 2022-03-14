@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block title %} {{pet.name}} {% endblock %} {% block
+content %}
+<h1 class="text-center">{{pet.name}}</h1>
+<hr />
+<div class="row">
+	<div class="col-12 col-md-6">
+		<img
+			src="{{pet.photo_url}}"
+			alt="{{pet.name}}'s photo."
+			class="img-fluid img-thumbnail"
+		/>
+	</div>
+	<div class="col-12 col-md-6">
+		<ul>
+			<li><strong>Species:</strong> {{pet.species}}</li>
+			{% if pet.age %}
+			<li><strong>Age:</strong> {{pet.age}}</li>
+			{% endif %}
+		</ul>
+
+		<form method="post">
+			{{ form.hidden_tag() }}
+			<!--add type=hidden form fields -->
+			<p class="form-group">
+				{{form.photo_url.label}}
+				{{form.photo_url(class_="form-control")}}
+				<small class="text-danger">{{ error }}</small>
+			</p>
+
+			<p class="form-group">
+				{{form.age.label}} {{form.age(class_="form-control")}}
+				<small class="text-danger">{{ error }}</small>
+			</p>
+
+			<p class="form-group">
+				{{form.available(class_="form-check-input")}}
+				{{form.available.label(class_="form-check-label")}}
+				<small class="text-danger">{{ error }}</small>
+			</p>
+
+			<a href="/" class="btn btn-outline-danger">Cancel</a>
+			<button type="submit" class="btn btn-outline-success">
+				Submit
+			</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

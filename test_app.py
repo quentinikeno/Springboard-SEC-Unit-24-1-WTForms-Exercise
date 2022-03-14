@@ -47,22 +47,23 @@ class PetViewsTestCase(TestCase):
             html = resp.get_data(as_text=True)
             
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('<h1 class="text-center display-1">Pets</h1>"', html)
+            self.assertIn('<h1 class="text-center display-1">Pets</h1>', html)
             self.assertIn(f"{self.pet.name}", html)
 
-    def test_snack_add_form(self):
+    def test_pet_add_form(self):
         with app.test_client() as client:
             resp = client.get("/add")
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('<form id="snack-add-form"', html)
+            self.assertIn('<form id="pet-form" method="POST">', html)
 
-    def test_snack_add(self):
+    def test_pet_add(self):
         with app.test_client() as client:
-            d = {"name": "Test2", "price": 2}
+            d = {"name": "Test Pet 2", "species": "dog"}
             resp = client.post("/add", data=d, follow_redirects=True)
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Added Test2 at 2", html)
+            self.assertIn('<h1 class="text-center display-1">Pets</h1>', html)
+            self.assertIn("Test Pet 2", html)

@@ -1,13 +1,24 @@
 from unicodedata import name
+from xmlrpc.client import Boolean
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, BooleanField, IntegerField, RadioField, SelectField
-from wtforms.validators import InputRequired, Optional
+from wtforms.validators import InputRequired, Optional, URL, NumberRange
 
 class PetForm(FlaskForm):
-    """Form for adding/editing pets for adoption."""
+    """Form for adding pets for adoption."""
     
     name = StringField("Name", validators=[InputRequired(message="Pet name can't be blank.")])
-    species = StringField("Species", validators=[InputRequired(message="Species name can't be blank.")])
-    photo_url = StringField("Photo URL", validators=[Optional()])
-    age = StringField("Age", validators=[Optional()])
+    
+    choices = [('cat', 'Cat'), ('dog', 'Dog'), ('hh', 'Hedgehog')]
+    species = SelectField("Species", choices=choices)
+    
+    photo_url = StringField("Photo URL", validators=[Optional(), URL()])
+    age = IntegerField("Age", validators=[Optional(), NumberRange(min=0, max=30)])
     notes = StringField("Notes", validators=[Optional()])
+    
+class EditPetForm(FlaskForm):
+    """Form for editing pets for adoption."""
+    
+    photo_url = StringField("Photo URL", validators=[Optional(), URL()])
+    age = IntegerField("Age", validators=[Optional(), NumberRange(min=0, max=30)])
+    available = BooleanField("Available for Adoption")

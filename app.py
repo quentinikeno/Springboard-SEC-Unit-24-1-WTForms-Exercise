@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Pet
 
-from forms import PetForm
+from forms import PetForm, EditPetForm
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "oh-so-secret"
@@ -31,9 +31,30 @@ def new_pet_form():
         data = {k: v for k, v in form.data.items() if k != "csrf_token"}
         #Unpack data into Pet instance
         new_pet = Pet(**data)
-        flask(f"Create new pet named {new_pet.name}!", "success")
+        db.session.add(new_pet)
+        db.session.commit()
+        flash("Successfully created a new pet!", "success")
         return redirect("/")
     else:
         if form.errors:
             flash("Something went wrong.  Please see the problems below.", "danger") 
         return render_template("add_pet_form.html", form=form)
+    
+@app.route("/<int:pet_id_number>", methods=["GET", "POST"])
+def pet_detail(pet_id_number):
+    
+    pet = Pet.query.get_or_404(pet_id_number)
+    form = EditPetForm()
+    
+    if form.validate_on_submit():
+        pet.photo_url = form.photo_url.data
+        pet.age = form.age.data
+        pet.available = form.available.data
+        db.session.add(pet)
+        db.session.commit()
+        flash(f"Successfully updated {pet.name}!", "success")
+        return redirect("/")
+    else:
+        if form.errors:
+            flash("Something went wrong.  Please see the problems below.", "danger") 
+        return render_template("pet_detail.html", pet=pet, form=form)
